@@ -18,45 +18,82 @@ btnClose.addEventListener("click", function () {
 
 let firstDiv = document.getElementById("cloneSection");
 
+let hoverFunction = (theDiv) => {
+    theDiv.children[1].classList.add("dataImageover");
+    theDiv.children[1].classList.remove("dataImageoutside");
+    theDiv.children[0].classList.add("dataNameInside");
+    theDiv.children[0].classList.remove("dataName");
+}
+let leaveFunction = (theDiv) => {
+    theDiv.children[1].classList.add("dataImageoutside");
+    theDiv.children[1].classList.remove("dataImageover");
+    theDiv.children[0].classList.add("dataName");
+    theDiv.children[0].classList.remove("dataNameInside");
+}
+
 let cloner = (filmData) => {
     let secondDiv = firstDiv.cloneNode(true);
     secondDiv.children[1].src = filmData.img;
     secondDiv.children[0].innerHTML = filmData.name;
     secondDiv.id = filmData.id;
+    secondDiv.addEventListener('mouseover', function () { hoverFunction(secondDiv); });
+    secondDiv.addEventListener('mouseleave', function () { leaveFunction(secondDiv); });
     secondDiv.addEventListener('click', function () { dataWindow(secondDiv.id); });
     document.getElementById('bigDivs').appendChild(secondDiv);
     secondDiv.style.display = 'block';
 }
 
-btnMovies.addEventListener("click", function() {
+btnMovies.addEventListener("click", function () {
+    let allData = document.getElementsByClassName("sectionToClone");
+    while (allData.length > 0) allData[0].remove();
+    for (let x = 0; x < data.films.length; x++) {
+        cloner(data.films[x]);
+    }
+})
+
+btnCharacters.addEventListener("click", function () {
+    let allData = document.getElementsByClassName("sectionToClone");
+    while (allData.length > 0) allData[0].remove();
+    for (let x = 0; x < data.films.length; x++) {
+        data.films[x].people.forEach(characters => {
+            cloner(characters);
+        })
+    }
+})
+
+btnVehicles.addEventListener("click", function () {
+    let allData = document.getElementsByClassName("sectionToClone");
+    while (allData.length > 0) allData[0].remove();
+    for (let x = 0; x < data.films.length; x++) {
+        data.films[x].vehicles.forEach(vehicles => {
+            cloner(vehicles);
+        })
+    }
+})
+
+btnLocations.addEventListener("click", function () {
+    let allData = document.getElementsByClassName("sectionToClone");
+    while (allData.length > 0) allData[0].remove();
+    for (let x = 0; x < data.films.length; x++) {
+        data.films[x].locations.forEach(location => {
+            cloner(location);
+        })
+    }
+})
 
 for (let x = 0; x < data.films.length; x++) {
-    cloner(data.films[x]);   
-}
-location.reload()
-})
-
-btnCharacters.addEventListener("click", function() {
-    for (let x = 0; x < data.films.length; x++) {
-    data.films[x].people.forEach(characters=> {
+    cloner(data.films[x]);
+    data.films[x].people.forEach(characters => {
         cloner(characters);
-    })}
-})
-
-btnVehicles.addEventListener("click", function() {
-    for (let x = 0; x < data.films.length; x++) {
-    data.films[x].vehicles.forEach(vehicles=> {
+    })
+    data.films[x].vehicles.forEach(vehicles => {
         cloner(vehicles);
-    })}
-})
-
-btnLocations.addEventListener("click", function() {
-    for (let x = 0; x < data.films.length; x++) {
+    })
     data.films[x].locations.forEach(location => {
         cloner(location);
-    })}
-})
-    
+    })
+}
+
 
 const showData = document.getElementById("root");
 showData.addEventListener('click', function () { showData.style.display = 'none' })
@@ -75,34 +112,34 @@ function dataWindow(filmName) {
         else {
             data.films[x].people.forEach(name => {
                 if (filmName === name.id) {
-                document.getElementById('data1').innerHTML = ('Name: ' + name.name);
-                document.getElementById('data2').innerHTML = ('Age: ' + name.age);
-                document.getElementById('data3').innerHTML = ('Eye color: ' + name.eye_color);
-                document.getElementById('data4').innerHTML = ('Gender: ' + name.gender);
-                document.getElementById('data5').innerHTML = ('Hair color: ' + name.hair_color);
-                document.getElementById('data6').innerHTML = ('Apears in: ' + data.films[x].name);
+                    document.getElementById('data1').innerHTML = ('Name: ' + name.name);
+                    document.getElementById('data2').innerHTML = ('Age: ' + name.age);
+                    document.getElementById('data3').innerHTML = ('Eye color: ' + name.eye_color);
+                    document.getElementById('data4').innerHTML = ('Gender: ' + name.gender);
+                    document.getElementById('data5').innerHTML = ('Hair color: ' + name.hair_color);
+                    document.getElementById('data6').innerHTML = ('Apears in: ' + data.films[x].name);
                 }
-                });
-                data.films[x].vehicles.forEach(name => {
+            });
+            data.films[x].vehicles.forEach(name => {
                 if (filmName === name.id) {
-                document.getElementById('data1').innerHTML = ('Name: ' + name.name);
-                document.getElementById('data2').innerHTML = ('Description: ' + name.description);
-                document.getElementById('data3').innerHTML = ('Vehicle class: ' + name.vehicle_class);
-                document.getElementById('data4').innerHTML = ('Pilot: ' + name.pilot.name);
-                document.getElementById('data5').innerHTML = ('Length: ' + name.length);
-                document.getElementById('data6').innerHTML = ('Apears in: ' + data.films[x].name);
+                    document.getElementById('data1').innerHTML = ('Name: ' + name.name);
+                    document.getElementById('data2').innerHTML = ('Description: ' + name.description);
+                    document.getElementById('data3').innerHTML = ('Vehicle class: ' + name.vehicle_class);
+                    document.getElementById('data4').innerHTML = ('Pilot: ' + name.pilot.name);
+                    document.getElementById('data5').innerHTML = ('Length: ' + name.length);
+                    document.getElementById('data6').innerHTML = ('Apears in: ' + data.films[x].name);
                 }
-                });
-                data.films[x].locations.forEach(name => {
+            });
+            data.films[x].locations.forEach(name => {
                 if (filmName === name.id) {
-                document.getElementById('data1').innerHTML = ('Name: ' + name.name);
-                document.getElementById('data2').innerHTML = ('Climate: ' + name.climate);
-                document.getElementById('data3').innerHTML = ('Residents: ' + name.residents);
-                document.getElementById('data4').innerHTML = ('Water surface: ' + name.surface_water);
-                document.getElementById('data5').innerHTML = ('Terrain: ' + name.terrain);
-                document.getElementById('data6').innerHTML = ('Appears in: ' + data.films[x].name);
+                    document.getElementById('data1').innerHTML = ('Name: ' + name.name);
+                    document.getElementById('data2').innerHTML = ('Climate: ' + name.climate);
+                    document.getElementById('data3').innerHTML = ('Residents: ' + name.residents);
+                    document.getElementById('data4').innerHTML = ('Water surface: ' + name.surface_water);
+                    document.getElementById('data5').innerHTML = ('Terrain: ' + name.terrain);
+                    document.getElementById('data6').innerHTML = ('Appears in: ' + data.films[x].name);
                 }
-                });
+            });
         }
     }
 }
