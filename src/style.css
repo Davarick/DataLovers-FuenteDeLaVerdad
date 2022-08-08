@@ -17,17 +17,7 @@ header {
     flex-direction: column;
     justify-content: center;
     padding: 10px;
-    margin: 0px 10px 10px 0px;
-    position: fixed;
-    z-index: 3;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 15%;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 5px;
+    margin: 20px;
 }
 
 h1 {
@@ -42,8 +32,8 @@ img {
 
 .subtitle {
     font-size: 20px;
-    letter-spacing: 15px;
-    padding-left: 15px;
+    letter-spacing: 13px;
+    padding-left: 10px;
 }
 
 .btnNav {
@@ -65,8 +55,11 @@ img {
 
 .sidebar {
     position: fixed;
+    display: grid;
+    grid-template-columns: 50px;
+    z-index: 5;
     width: 250px;
-    height: 350px;
+    height: 100%;
     top: 0;
     right: 0;
     background: #EB9010;
@@ -92,12 +85,12 @@ nav ul li {
     text-align: center;
 }
 
-nav ul li a {
-    color: #ffffff;
+.btnList {
     text-decoration: none;
-    font-size: 18px;
-    display: block;
-    width: 100%;
+    background-color: transparent;
+    color: #ffffff;
+    justify-content: center;
+    border-color: transparent;
     cursor: pointer;
 }
 
