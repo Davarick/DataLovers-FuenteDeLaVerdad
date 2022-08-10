@@ -1,3 +1,4 @@
+import { emptyScreenJean, emptyScreenRos, sortDataAndClone, cloner } from './data.js';
 import data from './data/ghibli/ghibli.js';
 
 const textNav = document.getElementById("textNav");
@@ -16,103 +17,183 @@ btnNav.addEventListener("click", function () {
 btnClose.addEventListener("click", function () {
     textNav.style.display = "none";
 });
+let selectedElement;
+data.films.forEach(element => {
+    cloner(element);
+    sortDataAndClone(element.people);
+    sortDataAndClone(element.locations);
+    sortDataAndClone(element.vehicles);
+    selectedElement = 'all';
+});
 
-let firstDiv = document.getElementById("cloneSection");
-
-export let cloner = (filmData) => {
-    let secondDiv = firstDiv.cloneNode(true);
-    secondDiv.children[1].src = filmData.img;
-    secondDiv.children[0].innerHTML = filmData.name;
-    secondDiv.id = filmData.id;
-    secondDiv.addEventListener('click', function () { dataWindow(secondDiv.id); });
-    document.getElementById('bigDivs').appendChild(secondDiv);
-    secondDiv.style.display = 'block';
-}
-
-for (let x = 0; x < data.films.length; x++) {
-    cloner(data.films[x]);
-    data.films[x].people.forEach(character => {
-        cloner(character);
-    });
-    data.films[x].vehicles.forEach(vehicle => {
-        cloner(vehicle);
-    });
-    data.films[x].locations.forEach(location => {
-        cloner(location);
-    });
-}
 
 
 btnMovies.addEventListener("click", function () {
-    const removeSection = document.getElementById("bigDivs")
-    removeSection.parentNode.removeChild(removeSection)
-
-    const newDiv = document.createElement("div");
-    newDiv.id = "bigDivs"
-    document.body.appendChild(newDiv)
-
-    for (let x = 0; x < data.films.length; x++) {
-        cloner(data.films[x]);
-    }
+    emptyScreenJean();
+    sortDataAndClone(data.films);
+    selectedElement = 'films';
 })
 
-
 btnCharacters.addEventListener("click", function () {
-
-    const removeSection = document.getElementById("bigDivs")
-    removeSection.parentNode.removeChild(removeSection)
-
-    const newDiv = document.createElement("div");
-    newDiv.id = "bigDivs"
-
-    document.body.appendChild(newDiv)
-    firstDiv.remove();
-    for (let x = 0; x < data.films.length; x++) {
-        data.films[x].people.forEach(character => cloner(character))
-    }
+    emptyScreenJean();
+    data.films.forEach(element => {
+        sortDataAndClone(element.people);
+    });
+    selectedElement = 'characters';
 })
 
 btnVehicles.addEventListener("click", function () {
-    let allData = document.getElementsByClassName("sectionToClone");
-    while (allData.length > 0) allData[0].remove();
-    for (let x = 0; x < data.films.length; x++) {
-        data.films[x].vehicles.forEach(vehicles => {
-            cloner(vehicles);
-        })
-    }
+    emptyScreenRos();
+    data.films.forEach(element => {
+        sortDataAndClone(element.vehicles);
+    });
+    selectedElement = 'vehicles';
 })
 
 btnLocations.addEventListener("click", function () {
-    let allData = document.getElementsByClassName("sectionToClone");
-    while (allData.length > 0) allData[0].remove();
-    for (let x = 0; x < data.films.length; x++) {
-        data.films[x].locations.forEach(location => {
-            cloner(location);
-        })
-    }
+    emptyScreenRos();
+    data.films.forEach(element => {
+        sortDataAndClone(element.locations);
+    });
+    selectedElement = 'locations';
 })
 
 btnShowAll.addEventListener("click", function () {
-    const removeSection = document.getElementById("bigDivs")
-    removeSection.parentNode.removeChild(removeSection)
-
-    const newDiv = document.createElement("div");
-    newDiv.id = "bigDivs"
-    document.body.appendChild(newDiv)
-
-    for (let x = 0; x < data.films.length; x++) {
-        cloner(data.films[x]);
-        data.films[x].people.forEach(character => {
-            cloner(character);
-        });
-        data.films[x].vehicles.forEach(vehicle => {
-            cloner(vehicle);
-        });
-        data.films[x].locations.forEach(location => {
-            cloner(location);
-        });
-    }
+    emptyScreenRos();
+    data.films.forEach(element => {
+        cloner(element);
+        sortDataAndClone(element.people);
+        sortDataAndClone(element.locations);
+        sortDataAndClone(element.vehicles);
+    });
+    selectedElement = 'all';
 })
+
+const orderAZ = () => {
+    emptyScreenRos();
+    switch (selectedElement) {
+        case 'films':
+            let dataArray = data.films.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            dataArray.forEach(item => cloner(item));
+            break;
+        case 'characters':
+            let dataArray1 = [];
+            data.films.forEach(film => {
+                dataArray1.push(film.people.filter(character => character.name));
+            });
+            let dataArray2 = dataArray1.flat();
+            let dataArray3 = dataArray2.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            dataArray3.forEach(item => cloner(item));
+            break;
+        case 'vehicles':
+            let dataArray4 = [];
+            data.films.forEach(film => {
+                dataArray4.push(film.vehicles.filter(vehicle => vehicle.name));
+            });
+            let dataArray5 = dataArray4.flat();
+            let dataArray6 = dataArray5.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            dataArray6.forEach(item => cloner(item));
+            break;
+        case 'locations':
+            let dataArray7 = [];
+            data.films.forEach(film => {
+                dataArray7.push(film.locations.filter(location => location.name));
+            });
+            let dataArray8 = dataArray7.flat();
+            let dataArray9 = dataArray8.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            dataArray9.forEach(item => cloner(item));
+            break;
+        case 'all':
+            let dataArray11 = data.films.filter(film => film.name);
+            data.films.forEach(film => {
+                dataArray11.push(film.locations.filter(location => location.name));
+            });
+            let dataArray12 = dataArray11.flat();
+            let dataArray13 = dataArray12.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            dataArray13.forEach(item => cloner(item));
+            break;
+
+    }
+
+}
+const btnOrderAZ = document.getElementById('btnOrderAZ');
+btnOrderAZ.addEventListener("click", orderAZ);
+
+const orderZA = () => {
+    emptyScreenRos();
+    switch (selectedElement) {
+        case 'films':
+            let dataArray = data.films.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            let reverseDataArray = dataArray.reverse();
+            reverseDataArray.forEach(item => cloner(item));
+            break;
+        case 'characters':
+            let dataArray1 = [];
+            data.films.forEach(film => {
+                dataArray1.push(film.people.filter(character => character.name));
+            });
+            let dataArray2 = dataArray1.flat();
+            let dataArray3 = dataArray2.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            let reverseDataArray3 = dataArray3.reverse();
+            reverseDataArray3.forEach(item => cloner(item));
+            break;
+        case 'vehicles':
+            let dataArray4 = [];
+            data.films.forEach(film => {
+                dataArray4.push(film.vehicles.filter(vehicle => vehicle.name));
+            });
+            let dataArray5 = dataArray4.flat();
+            let dataArray6 = dataArray5.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            let reverseDataArray6 = dataArray6.reverse();
+            reverseDataArray6.forEach(item => cloner(item));
+            break;
+        case 'locations':
+            let dataArray7 = [];
+            data.films.forEach(film => {
+                dataArray7.push(film.locations.filter(location => location.name));
+            });
+            let dataArray8 = dataArray7.flat();
+            let dataArray9 = dataArray8.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            let reverseDataArray9 = dataArray9.reverse();
+            reverseDataArray9.forEach(item => cloner(item));
+            break;
+        case 'all':
+            let dataArray11 = data.films.filter(film => film.name);
+            data.films.forEach(film => {
+                dataArray11.push(film.locations.filter(location => location.name));
+            });
+            let dataArray12 = dataArray11.flat();
+            let dataArray13 = dataArray12.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            let reverseDataArray13 = dataArray13.reverse();
+            reverseDataArray13.forEach(item => cloner(item));
+            break;
+
+    }
+
+}
+
+const btnOrderZA = document.getElementById('btnOrderZA');
+btnOrderZA.addEventListener("click", orderZA);
 
 const showData = document.getElementById("root");
 showData.addEventListener('click', function () { showData.style.display = 'none' })
